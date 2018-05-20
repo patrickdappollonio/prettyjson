@@ -1,0 +1,22 @@
+language: go
+go:
+  - 1.10.2
+
+install:
+  - # an empty install saves the hassle of pseudo-getting deps (they're vendored, so no need!)
+
+script:
+  - GOOS=linux go build -a -tags netgo -ldflags '-s -w' -o linux/prettyjson
+  - GOOS=darwin go build -a -tags netgo -ldflags '-s -w' -o darwin/prettyjson
+  - tar czf prettyjson-linux.tar.gz linux/
+  - tar czf prettyjson-darwin.tar.gz darwin/
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file:
+    - prettyjson-linux.tar.gz
+    - prettyjson-darwin.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true

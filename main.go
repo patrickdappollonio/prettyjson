@@ -2,15 +2,19 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/alecthomas/chroma/quick"
 )
 
 func main() {
 	// grab all arguments except the app name
 	args := os.Args[1:]
+	fileName := ""
 
 	var buf bytes.Buffer
 
@@ -22,6 +26,8 @@ func main() {
 			errexit("unable to read from stdin: %s", err.Error())
 			return
 		}
+
+		fileName = "stdin"
 
 	case 1:
 		// with one arguments, a file was passed
@@ -51,12 +57,36 @@ func main() {
 			return
 		}
 
+		fileName = args[0]
+
 	default:
 		errexit("input must be sent via stdin or by passing a file name")
 		return
 	}
 
-	fmt.Print(buf.String())
+	// check if the buffer has JSON
+	var contents interface{}
+	if err := json.NewDecoder(&buf).Decode(&contents); err != nil {
+		errexit("unable to parse JSON contents from %q: %s", fileName, err.Error())
+		return
+	}
+
+	// reset the buffer just in case
+	// (it should've drain from the decoder above)
+	buf.Reset()
+
+	enc := json.NewEncoder(&buf)
+	enc.SetIndent("", "  ")
+
+	// re-encoding it will also let the JSON content be pretty-printed
+	if err := enc.Encode(contents); err != nil {
+		errexit("unable to re-indent JSON content: %s", err.Error())
+	}
+
+	if err := quick.Highlight(os.Stdout, buf.String(), "json", "terminal16m", "monokai"); err != nil {
+		errexit("unable to perform syntax highlight: %s", err.Error())
+		return
+	}
 }
 
 func errexit(format string, args ...interface{}) {
