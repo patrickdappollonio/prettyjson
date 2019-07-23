@@ -7,8 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-
-	"github.com/alecthomas/chroma/quick"
 )
 
 func main() {
@@ -83,9 +81,9 @@ func main() {
 		errexit("unable to re-indent JSON content: %s", err.Error())
 	}
 
-	if err := quick.Highlight(os.Stdout, buf.String(), "json", "terminal16m", "monokai"); err != nil {
-		errexit("unable to perform syntax highlight: %s", err.Error())
-		return
+	// Write the contents to stdout
+	if _, err := os.Stdout.Write(buf.Bytes()); err != nil {
+		errexit("unable to write buffer contents to stdout: %s", err.Error())
 	}
 }
 
