@@ -6,17 +6,17 @@ install:
   - # an empty install saves the hassle of pseudo-getting deps (they're vendored, so no need!)
 
 script:
-  - GOOS=linux go build -a -tags netgo -ldflags '-s -w' -o linux/prettyjson
-  - GOOS=darwin go build -a -tags netgo -ldflags '-s -w' -o darwin/prettyjson
-  - tar czf prettyjson-linux.tar.gz linux/
-  - tar czf prettyjson-darwin.tar.gz darwin/
+  - GOOS=linux go build -a -tags netgo -ldflags '-s -w' -o linux/prettyjson-linux
+  - GOOS=darwin go build -a -tags netgo -ldflags '-s -w' -o darwin/prettyjson-darwin
+  - GOOS=windows go build -a -tags netgo -ldflags '-s -w' -o windows/prettyjson-windows
 
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file:
-    - prettyjson-linux.tar.gz
-    - prettyjson-darwin.tar.gz
+    - linux/prettyjson-linux
+    - linux/prettyjson-darwin
+    - linux/prettyjson-windows
   skip_cleanup: true
   on:
     tags: true
