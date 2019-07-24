@@ -12,11 +12,13 @@ script:
 
 deploy:
   provider: releases
-  api_key: $GITHUB_TOKEN
+  api_key:
+    secure: iV/DWVZ0POrLJE/ptEbN3ukks7139Lw5RRN5/zuKXjN9cMY3hXp4Hc5BMmb2pl0yhfBLAKKeCfxgowTeASFhpXeMqrnoI6Rzr5jSXABLvvO0iLy53TUEGUoAgGEfXi3+GxzrIf95Nsj2ydGQn1I/R88/j0+03x3YA6z6OlKvWA6uWqV/SOn5Cah3lcbbHgRIEXdoC99vBiJAh9qX7IbXxwp9+NplNWdfHO5yhe6FpoBvXNPGjfiDvf7jrYRCfKgtzc+mu32s4ivhBnl31IRAlRyoXqWceVIAv95+HpMBnNkZob/0OB8HHM4SG6F+WB+901qvcv2Lco7onL6a8gDHS44F8L6xCAON5F8sLWmLunJlM8yrNHCjxI9spW9L7aEWMEUWnP1jBTmijglS0ZQw2CWGgQ7ILWEM8A3d78tOBuxj2Q3r1kbpHqI8ICB7yxqL2F3ryTDsQkWDvNRixg3wzD5SZTTRGugHafPo77r7AvHnA8qTJxiT/FnGHz6iFPJeB+bDN+qUDDN3CweoAAIe40Arb/G/gSS7tt/DTMsMP9gTFltKOCR24K91tnxexR2x7bf4orf9sBMCl1aBRexavT4z3bEroEolWmxdLZ/r3piHPlbrKsaNmunDaRxRAOgGW1VbJ0zWia05QoqxQ1Ls06qOL0Uqbli0be7yHeji134=
   file:
     - linux/prettyjson-linux
     - linux/prettyjson-darwin
     - linux/prettyjson-windows
   skip_cleanup: true
   on:
+    repo: patrickdappollonio/prettyjson
     tags: true
